@@ -290,8 +290,10 @@ function M.do_test(prefix, cmd)
                     prefix,
                     string.format('error code: %d', code)
                 )
-            elseif not qf_win.is_on() then
-                qf_win.clear()
+            else
+                if not qf_win.is_on() then
+                    qf_win.clear()
+                end
                 output.show_info(prefix, '✅ PASS')
             end
         end,
