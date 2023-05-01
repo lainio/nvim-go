@@ -81,13 +81,20 @@ end
 
 local function parse_qf_line(qf_list, test_event)
     if string.match(test_event.Msg, correctly_formatted) then
-        local path_to_testfile = calc_relative_path_to(test_event.Package)
         local path_corrected_msg =
-            string.gsub(test_event.Msg, '^    ', path_to_testfile)
+        string.gsub(test_event.Msg, '^    ', '')
         local filename, lnum, text =
-            string.match(path_corrected_msg, '^(.+%.go):(%d+): (.+)$')
+        string.match(path_corrected_msg, '^(.+%.go):(%d+): (.+)$')
+        -- if err2 is in use we have full filename w/ path, but test it
+        if not util.is_file(filename) then
+            -- wasn't full filename, calculate the path to it
+            local path_to_testfile = calc_relative_path_to(test_event.Package)
+            filename = path_to_testfile .. filename
+        else
+            print("proper filename: "..filename)
+        end
         table.insert(qf_list, {
-            filename = filename,
+            filename = filename, -- should be full filename w/ path
             lnum = lnum,
             type = 'E',
             module = test_event.Name,
