@@ -90,8 +90,6 @@ local function parse_qf_line(qf_list, test_event)
             -- wasn't full filename, calculate the path to it
             local path_to_testfile = calc_relative_path_to(test_event.Package)
             filename = path_to_testfile .. filename
-        else
-            print("proper filename: "..filename)
         end
         table.insert(qf_list, {
             filename = filename, -- should be full filename w/ path
