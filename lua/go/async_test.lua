@@ -190,7 +190,8 @@ local function quickfix(prefix)
         end
 
         if out.win_nr ~= nil then
-            vim.fn.setloclist(out.win_nr, qf_list, 'a')
+            -- vim.fn.setloclist(out.win_nr, qf_list, 'a')
+            vim.fn.setqflist(qf_list, 'a')
             return
         end
 
@@ -199,17 +200,22 @@ local function quickfix(prefix)
         height = height < 3 and 3 or height
         local title = out.title and out.title or 'go test result'
 
-        vim.fn.setloclist(win_nr, qf_list, 'r')
-        vim.fn.setloclist(win_nr, {}, 'a', { title = title })
-        vim.api.nvim_command(string.format('lopen %d', height))
+        -- vim.fn.setloclist(win_nr, qf_list, 'r')
+        vim.fn.setqflist(qf_list, 'r')
+        -- vim.fn.setloclist(win_nr, {}, 'a', { title = title })
+        vim.fn.setqflist({}, 'a', { title = title })
+        -- vim.api.nvim_command(string.format('lopen %d', height))
+        vim.api.nvim_command(string.format('copen %d', height))
         out.win_nr = win_nr
     end
     out.clear = function()
         if not out.win_nr then
             out.win_nr = vim.fn.winnr()
         end
-        vim.fn.setloclist(out.win_nr, {})
-        vim.api.nvim_command('lclose')
+        -- vim.fn.setloclist(out.win_nr, {})
+        vim.fn.setqflist({})
+        -- vim.api.nvim_command('lclose')
+        vim.api.nvim_command('cclose')
     end
     out.is_on = function()
         return out.win_nr ~= nil
